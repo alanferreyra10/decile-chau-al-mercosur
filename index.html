@@ -23,4 +23,43 @@ const questions=[...document.querySelectorAll('.question')];let step=0;const pro
 function showStep(){questions.forEach((q,i)=>q.classList.toggle('active',i===step));progress.style.width=((step+1)*25)+'%';back.disabled=step===0;next.textContent=step===3?'Ver mis destinos →':'Siguiente →'}function selected(n){return document.querySelector('input[name="'+n+'"]:checked')?.value||''}function checked(n){return [...document.querySelectorAll('input[name="'+n+'"]:checked')].map(x=>x.value)}
 function makeResults(){const goal=selected('goal'),langs=checked('language'),budget=selected('budget'),when=selected('when');const places=[{name:'España',tags:['spanish','work','study','reside','business','citizenship'],why:'Puede ser un primer destino para investigar si priorizás el idioma español y querés comparar vías de trabajo, estudio o residencia.'},{name:'Portugal',tags:['portuguese','work','study','reside','business'],why:'Vale la pena investigarlo si manejás portugués o te interesa aprenderlo y comparar opciones de residencia, empleo o emprendimiento.'},{name:'Alemania',tags:['english','work','study','reside'],why:'Puede entrar en tu lista si te interesa la formación o el empleo y estás dispuesto a estudiar alemán y revisar requisitos profesionales.'},{name:'Uruguay',tags:['spanish','work','study','reside','business'],why:'Puede ser una alternativa regional para comparar cercanía, adaptación, trámites y costos antes de mirar destinos más lejanos.'},{name:'Canadá',tags:['english','work','study','reside'],why:'Conviene investigar sus programas oficiales de estudio, trabajo y residencia, que tienen criterios y documentación específicos.'},{name:'Chile',tags:['spanish','work','study','reside','business'],why:'Puede servir para comparar opciones regionales, mercado laboral, requisitos migratorios y costo de instalación.'}];const ranked=places.map(p=>{let score=p.tags.includes(goal)?3:0;langs.forEach(l=>{if(p.tags.includes(l))score+=2});if(budget==='low'&&['Uruguay','Chile'].includes(p.name))score++;if(when==='later'&&['Alemania','Canadá'].includes(p.name))score++;return {...p,score}}).sort((a,b)=>b.score-a.score).slice(0,3);const timing=when==='soon'?'Como pensás moverte pronto, priorizá verificar documentación, permisos y fondos antes de comprar pasajes.':when==='year'?'Tenés margen para preparar idioma, documentación, ahorros y postulaciones.':'Podés usar esta etapa para comparar países y preparar un plan sin apurarte.';results.innerHTML='<div class="result-intro"><strong>Tu primera lista para investigar</strong><br>'+timing+'<br><span style="color:#667085">Objetivo: '+({work:'trabajar',study:'estudiar',reside:'residir',business:'emprender',citizenship:'explorar ciudadanía'}[goal])+' · Presupuesto: '+({low:'menos de USD 2.000',mid:'USD 2.000 a 6.000',high:'más de USD 6.000',unknown:'sin definir'}[budget])+'</span></div><div class="result-grid">'+ranked.map((p,i)=>'<article class="result-card"><span class="tag">Opción '+(i+1)+'</span><h4>'+p.name+'</h4><p>'+p.why+'</p><span class="tag">Investigar requisitos oficiales</span></article>').join('')+'</div><p class="disclaimer">Importante: esta lista no es una evaluación de elegibilidad ni una recomendación legal. No se verificaron visas, vacantes ni costos actuales. Antes de decidir, comprobá las condiciones vigentes en los sitios oficiales. Tus respuestas se procesan en este dispositivo y no se envían a un servidor.</p><div class="wizard-actions"><button class="btn light" type="button" id="editBtn">← Cambiar respuestas</button><button class="btn" type="button" id="restartBtn">Volver a empezar</button></div>';results.classList.add('show');actions.style.display='none';results.scrollIntoView({behavior:'smooth',block:'start'});document.getElementById('editBtn').onclick=()=>{results.classList.remove('show');actions.style.display='flex';step=0;showStep()};document.getElementById('restartBtn').onclick=()=>{document.querySelectorAll('#wizard input').forEach(x=>x.checked=false);results.classList.remove('show');actions.style.display='flex';step=0;showStep()}}
 next.addEventListener('click',()=>{if(step===0&&!selected('goal'))return alert('Elegí tu objetivo para continuar.');if(step===1&&!checked('language').length)return alert('Elegí al menos un idioma para continuar.');if(step===2&&!selected('budget'))return alert('Elegí una opción de presupuesto para continuar.');if(step===3){if(!selected('when'))return alert('Elegí cuándo te gustaría dar el paso.');makeResults();return}step++;showStep()});back.addEventListener('click',()=>{if(step>0){step--;showStep()}});showStep();
-</script></body></html>
+</script><section id="aviso-legal" style="max-width:900px;margin:40px auto;padding:20px;font-family:Arial,sans-serif;line-height:1.6;color:inherit;">
+  <details>
+    <summary style="cursor:pointer;font-size:20px;font-weight:bold;">
+      Aviso legal – Decile Chau al Mercosur
+    </summary>
+
+    <h3>1. Naturaleza de la plataforma</h3>
+    <p>Decile Chau al Mercosur es una plataforma digital independiente que proporciona información y orientación a personas interesadas en emigrar legalmente desde países del Mercosur hacia otros países.</p>
+
+    <h3>2. Independencia institucional</h3>
+    <p>No pertenecemos a ningún gobierno, embajada, consulado ni organismo internacional.</p>
+
+    <h3>3. Carácter informativo</h3>
+    <p>La información publicada tiene carácter orientativo y educativo. No constituye asesoramiento jurídico, migratorio, fiscal ni profesional individualizado.</p>
+
+    <h3>4. Responsabilidad del usuario</h3>
+    <p>Cada usuario debe verificar los requisitos vigentes ante las autoridades oficiales del país de destino antes de iniciar cualquier trámite.</p>
+
+    <h3>5. Actualización de la información</h3>
+    <p>Procuramos utilizar fuentes oficiales y mantener los contenidos actualizados. Sin embargo, las leyes y los procedimientos migratorios pueden cambiar sin previo aviso.</p>
+
+    <h3>6. Enlaces externos</h3>
+    <p>Podemos incluir enlaces a organismos gubernamentales y sitios de terceros. No controlamos sus contenidos ni su disponibilidad.</p>
+
+    <h3>7. Propiedad intelectual</h3>
+    <p>Los contenidos originales de esta plataforma estarán protegidos por las normas aplicables de propiedad intelectual.</p>
+
+    <h3>8. Publicidad y servicios comerciales</h3>
+    <p>En el futuro podremos incorporar publicidad, enlaces de afiliación y servicios comerciales. Las relaciones comerciales serán identificadas de manera transparente.</p>
+
+    <h3>9. Modificaciones</h3>
+    <p>Este aviso podrá actualizarse cuando resulte necesario.</p>
+
+    <h3>10. Contacto</h3>
+    <p>Se habilitará un medio de contacto oficial para consultas y sugerencias.</p>
+
+    <p><strong>Decile Chau al Mercosur</strong><br>
+    Plataforma independiente de información y orientación migratoria.</p>
+  </details>
+</section></body></html>
